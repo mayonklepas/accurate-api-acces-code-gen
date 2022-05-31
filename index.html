@@ -64,7 +64,6 @@
         const clientId = document.getElementById("clientId");
         const clientSecret = document.getElementById("clientSecret");
         const oauthCallback = document.getElementById("oauthCallback");
-        const scope = document.getElementsByClassName("scope");
         const inbox = document.getElementById("inbox");
 
         for (let i = 0; i < scopeJson.length; i++) {
@@ -84,6 +83,7 @@
             inbox.appendChild(br);
         }
 
+        const scope = document.getElementsByClassName("scope");
         scope[0].addEventListener("change", function () {
             if (this.checked) {
                 for (let i = 0; i < scope.length; i++) {
