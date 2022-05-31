@@ -116,7 +116,7 @@
 
             let url = "https://account.accurate.id/oauth/authorize?client_id=" +
                 clientId.value + "&response_type=code&redirect_uri=" +
-                oauthCallback.value + "&scope=" + scopeString.trim();
+                oauthCallback.value + "&scope=" + scopeString.toLowerCase();
             window.open(url);
         }
 
