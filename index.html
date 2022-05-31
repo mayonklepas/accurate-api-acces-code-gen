@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Accurate API Registration</title>
+    <script src="scope.js"></script>
     <style>
         .box {
             border: 1px solid rgb(211, 211, 211);
@@ -52,13 +53,8 @@
         <label>Masukan Oauth Callback ini di settingan Aplikasi pada akun accurate anda</label>
         <input type="text" id="oauthCallback" value="https://mayonklepas.github.io/accurate-api-acces-code-gen/oauth-callback.html"><br>
         <label>Scope</label>
-        <div class="inbox">
-            <input type="checkbox" class="scope" value="all"> <label>All</label><br>
-            <input type="checkbox" class="scope" value="item_view"><label>Item View</label><br>
-            <input type="checkbox" class="scope" value="item_save"><label>Item Save</label><br>
-            <input type="checkbox" class="scope" value="customer_save"><label>Customer Save</label><br>
-            <input type="checkbox" class="scope" value=" sales_invoice_save"><label>Sales Invoice Save</label><br>
-        </div>
+        <input type="checkbox" class="scope" value="all"> <label>All</label><br>
+        <div class="inbox"></div>
         <button onclick="goRegister()" style="margin-top:10px">Register</button>
     </div>
     <script>
@@ -66,6 +62,13 @@
         const clientSecret = document.getElementById("clientSecret");
         const oauthCallback = document.getElementById("oauthCallback");
         const scope = document.getElementsByClassName("scope");
+        const inbox = document.getElementById("inbox");
+        
+        for (let i = 0; i < scope.length; i++) {
+            var x = document.createElement("INPUT");
+            x.setAttribute("type", "checkbox");
+            inbox.appendChild(x);
+        }
 
         scope[0].addEventListener("change", function () {
             if (this.checked) {
