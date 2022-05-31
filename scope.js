@@ -1,4 +1,4 @@
-let scope=[{
+let scopejson=[{
 	"name": "BANK_STATEMENT_VIEW",
 	"desc": "Melihat data rekening koran"
 }, {
