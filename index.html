@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oauth Callback</title>
+    <style>
+        .box {
+            border: 1px solid rgb(211, 211, 211);
+            padding: 20px;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width : 50%;
+            transform: translate(-50%, -50%)
+        }
+
+        textarea{
+            width : 100%;
+            height : 100px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="box">
+        <h3 style="text-align: center">REQUEST ACCESS CODE BERHASIL</h3>
+        Gunakan Akses Kode untuk mendapatkan Access Token dan Refresh Token dengan cara :
+        <br>Buka Postman lalu lakukan request ke alamat url ( https://account.accurate.id/oauth/token )
+        <br>dengan parameter seperti berikut.
+        <table>
+            <tr>
+                <td>code</td>
+                <td>:</td>
+                <td><span id="accessCode"></span></td>
+            </tr>
+            <tr>
+                <td>redirect_uri</td>
+                <td>:</td>
+                <td><span id="redirectUri"></span></td>
+            </tr>
+        </table>
+
+        Lalu pada pilihan Authorization pilih Basic dan masukan nilai dibawah ini sebagai value
+        <textarea id="basicAuth"></textarea>
+        <br />
+        jika request berhasil maka anda akan mendapatakan access token yang bisa anda gunakan untuk melakukan request API ke Accurate Online
+
+    </div>
+
+    <script>
+        const queryParams = new URLSearchParams(window.location.search)
+        const code = queryParams.get("code");
+
+        const identity = JSON.parse(localStorage.getItem("identity"));
+        const clientId = identity.clientId;
+        const clientSecret = identity.clientSecret;
+        const oauthCallback = identity.oauthCallback;
+        const basicAuth = btoa(clientId + ":" + clientSecret);
+
+        document.getElementById("accessCode").innerHTML = code;
+        document.getElementById("redirectUri").innerHTML = oauthCallback;
+        document.getElementById("basicAuth").value = basicAuth;
+
+       // localStorage.removeItem("identity");
+
+
+        /*async function getToken() {
+            const response = await fetch(url, {
+                method: "POST",
+                headers: {
+                    'Authorization': basicAuth,
+                    'Content-Type': "application/x-www-form-urlencoded"
+                },
+                body: "code=" + code + "&grant_type=authorization_code&redirect_uri=" + oauthCallback
+            })
+
+            const result = await response.json();
+
+
+            console.log(result);
+
+            document.getElementById("accessToken").innerHTML = result.access_token;
+            document.getElementById("refreshToken").innerHTML = result.refresh_token;
+            document.getElementById("scope").innerHTML = result.scope;
+            document.getElementById("expired").innerHTML = new Date(result.expires_in).toUTCString();
+        }
+
+        getToken();*/
+
+
+
+
+
+    </script>
+</body>
+
+</html>
