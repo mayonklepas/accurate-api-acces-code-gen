@@ -107,14 +107,16 @@
             let scopeString = "";
             for (let i = 1; i < scope.length; i++) {
                 if (scope[i].checked) {
-                    scopeString += scope[i].value + " ";
+                    scopeString += " "+scope[i].value;
                 }
 
             }
+            
+            scopeString = scopeString.substring(1,scopeString.length);
 
             let url = "https://account.accurate.id/oauth/authorize?client_id=" +
                 clientId.value + "&response_type=code&redirect_uri=" +
-                oauthCallback.value + "&scope=" + scopeString;
+                oauthCallback.value + "&scope=" + scopeString.trim();
             window.open(url);
         }
 
