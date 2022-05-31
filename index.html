@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Oauth Callback</title>
+    <title>Accurate API Registration</title>
     <style>
         .box {
             border: 1px solid rgb(211, 211, 211);
@@ -13,87 +13,92 @@
             position: absolute;
             left: 50%;
             top: 50%;
-            width : 50%;
+            width:350px;
             transform: translate(-50%, -50%)
         }
 
-        textarea{
-            width : 100%;
-            height : 100px;
+        .inbox {
+            border: 1px solid rgb(211, 211, 211);
+            padding: 20px;
+            height: 200px;
+            overflow-y: scroll;
+        }
+
+        input[type="text"]{
+            width: 100%;
+            outline: none;
+            border: 1px solid rgb(129, 129, 129,0.4);
+            color: rgb(56, 56, 56);
+        }
+
+        button{
+            padding: 10px 15px;
+            background-color: rgb(173, 32, 32);
+            color: rgb(253, 253, 253);
+            outline: none;
+            border: none;
+            width: 100%;
         }
     </style>
 </head>
 
 <body>
-
     <div class="box">
-        <h3 style="text-align: center">REQUEST ACCESS CODE BERHASIL</h3>
-        Gunakan Akses Kode untuk mendapatkan Access Token dan Refresh Token dengan cara :
-        <br>Buka Postman lalu lakukan request ke alamat url ( https://account.accurate.id/oauth/token )
-        <br>dengan parameter seperti berikut.
-        <table>
-            <tr>
-                <td>code</td>
-                <td>:</td>
-                <td><span id="accessCode"></span></td>
-            </tr>
-            <tr>
-                <td>redirect_uri</td>
-                <td>:</td>
-                <td><span id="redirectUri"></span></td>
-            </tr>
-        </table>
-
-        Lalu pada pilihan Authorization pilih Basic dan masukan nilai dibawah ini sebagai value
-        <textarea id="basicAuth"></textarea>
-        <br />
-        jika request berhasil maka anda akan mendapatakan access token yang bisa anda gunakan untuk melakukan request API ke Accurate Online
-
+        <h3 style="text-align: center">ACCURATE API TOKEN GENERATOR</h3>
+        <label>Client ID</label>
+        <input type="text" id="clientId"><br>
+        <label>Client Secret</label>
+        <input type="text" id="clientSecret"><br>
+        <input type="hidden" id="oauthCallback" value="http://localhost/accurate-api-registration/oauth-callback.html"><br>
+        <label>Scope</label>
+        <div class="inbox">
+            <input type="checkbox" class="scope" value="all"> <label>All</label><br>
+            <input type="checkbox" class="scope" value="item_view"><label>Item View</label><br>
+            <input type="checkbox" class="scope" value="item_save"><label>Item Save</label><br>
+            <input type="checkbox" class="scope" value="customer_save"><label>Customer Save</label><br>
+            <input type="checkbox" class="scope" value=" sales_invoice_save"><label>Sales Invoice Save</label><br>
+        </div>
+        <button onclick="goRegister()" style="margin-top:10px">Register</button>
     </div>
-
     <script>
-        const queryParams = new URLSearchParams(window.location.search)
-        const code = queryParams.get("code");
+        const clientId = document.getElementById("clientId");
+        const clientSecret = document.getElementById("clientSecret");
+        const oauthCallback = document.getElementById("oauthCallback");
+        const scope = document.getElementsByClassName("scope");
 
-        const identity = JSON.parse(localStorage.getItem("identity"));
-        const clientId = identity.clientId;
-        const clientSecret = identity.clientSecret;
-        const oauthCallback = identity.oauthCallback;
-        const basicAuth = btoa(clientId + ":" + clientSecret);
+        scope[0].addEventListener("change", function () {
+            if (this.checked) {
+                for (let i = 0; i < scope.length; i++) {
+                    scope[i].checked = true;
+                }
+            } else {
+                for (let i = 0; i < scope.length; i++) {
+                    scope[i].checked = false;
+                }
+            }
 
-        document.getElementById("accessCode").innerHTML = code;
-        document.getElementById("redirectUri").innerHTML = oauthCallback;
-        document.getElementById("basicAuth").value = basicAuth;
+        });
 
-       // localStorage.removeItem("identity");
+        function goRegister() {
+            let identity = new Object();
+            identity.clientId = clientId.value;
+            identity.clientSecret = clientSecret.value;
+            identity.oauthCallback = oauthCallback.value;
+            localStorage.setItem("identity", JSON.stringify(identity));
 
+            let scopeString = "";
+            for (let i = 1; i < scope.length; i++) {
+                if (scope[i].checked) {
+                    scopeString += scope[i].value + " ";
+                }
 
-        /*async function getToken() {
-            const response = await fetch(url, {
-                method: "POST",
-                headers: {
-                    'Authorization': basicAuth,
-                    'Content-Type': "application/x-www-form-urlencoded"
-                },
-                body: "code=" + code + "&grant_type=authorization_code&redirect_uri=" + oauthCallback
-            })
+            }
 
-            const result = await response.json();
-
-
-            console.log(result);
-
-            document.getElementById("accessToken").innerHTML = result.access_token;
-            document.getElementById("refreshToken").innerHTML = result.refresh_token;
-            document.getElementById("scope").innerHTML = result.scope;
-            document.getElementById("expired").innerHTML = new Date(result.expires_in).toUTCString();
+            let url = "https://account.accurate.id/oauth/authorize?client_id=" +
+                clientId.value + "&response_type=code&redirect_uri=" +
+                oauthCallback.value + "&scope=" + scopeString;
+            window.open(url);
         }
-
-        getToken();*/
-
-
-
-
 
     </script>
 </body>
