@@ -7,19 +7,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Oauth Callback</title>
     <style>
+        body {
+            font-size: 18px;
+            line-height: 1.5;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
         .box {
             border: 1px solid rgb(211, 211, 211);
             padding: 20px;
             position: absolute;
             left: 50%;
             top: 50%;
-            width : 50%;
+            width: 50%;
             transform: translate(-50%, -50%)
         }
 
-        textarea{
-            width : 100%;
-            height : 100px;
+        textarea {
+            width: 100%;
+            height: 100px;
         }
     </style>
 </head>
@@ -27,7 +33,7 @@
 <body>
 
     <div class="box">
-        <h3 style="text-align: center">REQUEST ACCESS CODE BERHASIL</h3>
+        <h3 style="text-align: center">GENERATE ACCESS CODE BERHASIL</h3>
         Gunakan Akses Kode untuk mendapatkan Access Token dan Refresh Token dengan cara :
         <br>Buka Postman lalu lakukan request ke alamat url ( https://account.accurate.id/oauth/token )
         <br>dengan parameter seperti berikut.
@@ -44,10 +50,10 @@
             </tr>
         </table>
 
-        Lalu pada pilihan Authorization pilih Basic dan masukan nilai dibawah ini sebagai value
-        <textarea id="basicAuth"></textarea>
+        Lalu pada pilihan Authorization pilih Basic dan masukan username dan password anda lalu lakukan request
         <br />
-        jika request berhasil maka anda akan mendapatakan access token yang bisa anda gunakan untuk melakukan request API ke Accurate Online
+        jika request berhasil maka anda akan mendapatakan access token yang bisa anda gunakan untuk melakukan request
+        API ke Accurate Online
 
     </div>
 
@@ -57,15 +63,17 @@
 
         const identity = JSON.parse(localStorage.getItem("identity"));
         const clientId = identity.clientId;
-        const clientSecret = identity.clientSecret;
         const oauthCallback = identity.oauthCallback;
-        const basicAuth = btoa(clientId + ":" + clientSecret);
 
         document.getElementById("accessCode").innerHTML = code;
         document.getElementById("redirectUri").innerHTML = oauthCallback;
-        document.getElementById("basicAuth").value = basicAuth;
 
-       // localStorage.removeItem("identity");
+
+        localStorage.removeItem("identity");
+
+        //document.getElementById("basicAuth").value = basicAuth;
+
+
 
 
         /*async function getToken() {
